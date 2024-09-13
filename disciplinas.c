@@ -27,7 +27,7 @@ int main(){
 
     FILE *file;
     // Abrindo o arquivo em modo leitura
-    file = fopen("matriz_curricular.txt", "r");
+    file = fopen("disciplinas.zip", "r");
     
     // Verifica se o arquivo foi aberto corretamente
     if (file == NULL) {
