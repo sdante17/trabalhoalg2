@@ -26,7 +26,7 @@ typedef struct {
 int main(){
 
     FILE *file;
-    char line[256]; // Buffer para armazenar cada linha do arquivo
+    char l[256]; // Buffer para armazenar cada linha do arquivo
 
     // Abrindo o arquivo em modo leitura
     file = fopen("matriz_curricular.txt", "r");
