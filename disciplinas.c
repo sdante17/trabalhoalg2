@@ -41,7 +41,17 @@ int main(){
 
     
     file = fopen("disciplinas.zip", "r");
-    
+
+    Disciplina disciplina[MAX_DISCIPLINAS];
+
+    fread(disciplinas, sizeof(Disciplina), MAX_DISCIPLINAS, file);
+
+    for(int i = 0; i < MAX_DISCIPLINAS; i++){
+        printf(">>%d\n\n"), disciplinas[i].numPrereqiostos);
+        
+    }
+
+    fclose(file);
 
     return 0;
 }
