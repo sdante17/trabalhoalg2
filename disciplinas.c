@@ -1,4 +1,15 @@
 #include <stdio.h>
+#include <string.h>
+
+void escreveTopo(){
+    printf("_____________________________________________________________________________________________________________________________________________\n                                                               Bem-vindo ao Vasco!\n_____________________________________________________________________________________________________________________________________________");
+    
+}
+
+void escreveMenu(){
+    
+    
+}
 
 // Definição do enum para o tipo de disciplina
 typedef enum {
@@ -24,16 +35,13 @@ typedef struct {
 } MatrizCurricular;
 
 int main(){
-
     FILE *file;
-    // Abrindo o arquivo em modo leitura
+
+    escreveTopo();
+
+    
     file = fopen("disciplinas.zip", "r");
     
-    // Verifica se o arquivo foi aberto corretamente
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo.\n");
-        return 1;
-    }
 
     return 0;
 }
