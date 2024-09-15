@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MAX_PREREQUISITOS 16
+#define MAX_DISCIPLINAS 32
+
 void escreveTopo(){
     printf("_____________________________________________________________________________________________________________________________________________\n                                                               Bem-vindo ao Vasco!\n_____________________________________________________________________________________________________________________________________________");
     
 }
 
-void escreveMenu(){
-    
-    
-}
 
 // Definição do enum para o tipo de disciplina
 typedef enum {
@@ -34,24 +33,31 @@ typedef struct {
     int numSemestres;                  // Número de semestres
 } MatrizCurricular;
 
+void lmatriz();
+
 int main(){
-    FILE *file;
 
     escreveTopo();
 
-    
+    lmatriz();
+
+    return 0;
+}
+
+void lmatriz(){
+    FILE *file;
+
     file = fopen("disciplinas.zip", "r");
 
-    Disciplina disciplina[MAX_DISCIPLINAS];
+    Disciplina disciplinas[MAX_DISCIPLINAS];
 
     fread(disciplinas, sizeof(Disciplina), MAX_DISCIPLINAS, file);
 
     for(int i = 0; i < MAX_DISCIPLINAS; i++){
-        printf(">>%d\n\n"), disciplinas[i].numPrereqiostos);
+        printf(">>%d\n\n", disciplinas[i].numPrerequisitos);
         
     }
 
     fclose(file);
 
-    return 0;
 }
