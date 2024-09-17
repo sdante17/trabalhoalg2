@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <string.h>
+#include <locale.h>
 
 #define MAX_PREREQUISITOS 10
 #define MAX_DISCIPLINAS 50
 #define MAX_SEMESTRES 10
 
 void escreveTopo(){
-    printf("_____________________________________________________________________________________________________________________________________________\n                                                               Bem-vindo ao Vasco!\n_____________________________________________________________________________________________________________________________________________\n");
+    printf("________________________________________________________________________________________________________________________________\n|                                                                                                                               |\n|                                            Matriz Curricular Engenharia de Software                                           |\n|_______________________________________________________________________________________________________________________________|\n");
     
+}
+
+void escreveMenu(){
+    setlocale(LC_ALL, "Portuguese"); 
+    printf("|                    |                    |                    |                    |                     |                     |\n|      Código        |       Curso        |         CH         |      Semestre      |       Pré-Req       |    Tipo de Disc     |\n|____________________|____________________|____________________|____________________|_____________________|_____________________|\n");
+
 }
 
 // Definição do enum para o tipo de disciplina
@@ -36,10 +43,11 @@ typedef struct {
 void lmatriz();
 
 int main(){
+    FILE *file;
 
     escreveTopo();
 
-    FILE *file;
+    escreveMenu();
 
     file = fopen("disciplinas.bin", "rb");
     //contando a quantidade de registros no arquivo
@@ -63,6 +71,7 @@ int main(){
         printf("", ); //printando os dados armazenados no array "disciplinas"
     }
 
+    
     return 0;
 }
 
