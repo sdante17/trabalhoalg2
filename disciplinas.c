@@ -7,13 +7,13 @@
 #define MAX_SEMESTRES 10
 
 void escreveTopo(){
-    printf("________________________________________________________________________________________________________________________________\n|                                                                                                                               |\n|                                            Matriz Curricular Engenharia de Software                                           |\n|_______________________________________________________________________________________________________________________________|\n");
+    printf("_______________________________________________________________________________________________________________________________\n|                                                                                                                             |\n|                                            Matriz Curricular Engenharia de Software                                         |\n|_____________________________________________________________________________________________________________________________|\n");
     
 }
 
 void escreveMenu(){
     setlocale(LC_ALL, "Portuguese"); 
-    printf("|                    |                    |                    |                    |                     |                     |\n|      Código        |       Curso        |         CH         |      Semestre      |       Pré-Req       |    Tipo de Disc     |\n|____________________|____________________|____________________|____________________|_____________________|_____________________|\n");
+    printf("|                    |                    |                    |                    |                    |                    |\n|      Código        |       Curso        |         CH         |      Semestre      |      Pré-Req       |    Tipo de Disc    |\n|____________________|____________________|____________________|____________________|____________________|____________________|\n");
 
 }
 
@@ -26,7 +26,7 @@ typedef enum {
 // Definição da struct para uma disciplina
 typedef struct {
     char codigo[10];                 // Código alfanumérico da disciplina
-    char titulo[100];                // Título da disciplina
+    char titulo[20];                // Título da disciplina
     int cargaHoraria;                // Carga horária da disciplina
     int semestre;                    // Semestre em que a disciplina é oferecida
     char prerequisitos[MAX_PREREQUISITOS][10];  // Lista de códigos das disciplinas pré-requisito
@@ -40,16 +40,22 @@ typedef struct {
     int numSemestres;                  // Número de semestres
 } MatrizCurricular;
 
-void lmatriz();
+void lerMatriz(FILE *file, Disciplina *disciplinas, int *quantidade);
+
+void print(const Disciplina *d);
 
 int main(){
     FILE *file;
+    Disciplina disciplinas[MAX_DISCIPLINAS];
+    int quantidadeRegistros;
 
     escreveTopo();
 
     escreveMenu();
 
-    file = fopen("disciplinas.bin", "rb");
+    file = fopen("home//adolfo//Documentos//codigos//disciplinas.txt", "r");
+
+    /*
     //contando a quantidade de registros no arquivo
     fseek(file, 0, SEEK_END); //mover o ponteiro para o final
 
@@ -58,23 +64,67 @@ int main(){
     rewind(file); //rebobinar, mandar ponteiro para o ínicio novamente
 
     int quantidadeRegistros = tamanhoArquivo / sizeof(Disciplina); //calculando a quatidade de registros
+    
 
     Disciplina disciplinas[quantidadeRegistros]; //array para armazenar os dados
 
     //fazendo a leitura dos dados
     fread(disciplinas, sizeof(Disciplina), quantidadeRegistros, file); //onde armazenar, tamanho da informação, tamanho da nossa leitura do arquivo, fonte
+    */
+
+    lerMatriz(file, disciplinas, &quantidadeRegistros);
 
     fclose(file);
 
     //varrer o vetor
-    for(int i = 0; i < quantidadeRegistros; i++){
-        printf("", ); //printando os dados armazenados no array "disciplinas"
+    for (int i = 0; i < quantidadeRegistros; i++){
+        print(&disciplinas[i]); //printando os dados armazenados no array "disciplinas"
     }
 
-    
     return 0;
 }
 
+void lerMatriz(FILE *file, Disciplina *disciplinas, int *quantidade) {
+    int i = 0;
+    while (fscanf(file, "%s %s %d %d %d", 
+                  disciplinas[i].codigo, 
+                  disciplinas[i].titulo, 
+                  &disciplinas[i].cargaHoraria, 
+                  &disciplinas[i].semestre, 
+                  &disciplinas[i].numPrerequisitos) != EOF) {
+        for (int j = 0; j < disciplinas[i].numPrerequisitos; j++) {
+            fscanf(file, "%s", disciplinas[i].prerequisitos[j]);
+        }
+        int tipo;
+        fscanf(file, "%d", &tipo);
+        disciplinas[i].tipo = (TipoDisciplina)tipo;
+        i++;
+    }
+    *quantidade = i;
+}
+
+void print(const Disciplina *d) {
+    const char *tipoD = (d->tipo == Obrigatoria) ? "Obrigatoria" : "Optativa"; //
+
+    
+    // Impressão dos dados da disciplina
+    printf("|%-20s|%-20s|%-20d|%-20d|\n", d->codigo, d->titulo, d->cargaHoraria, d->semestre);
+
+    // Impressão dos pré-requisitos
+    for (int i = 0; i < d->numPrerequisitos; i++) {
+        printf("%s ", d->prerequisitos[i]);
+    }
+    
+    // Completa os espaços se houver menos pré-requisitos
+    for (int i = d->numPrerequisitos; i < 2; i++) {
+        printf("               ");
+    }
+
+    // Impressão do tipo da disciplina
+    printf("|%-20s|\n", tipoD);
+}
+
+/*
 void lmatriz(){
     FILE *file;
 
@@ -91,4 +141,4 @@ void lmatriz(){
 
     fclose(file);
 
-}
+}*/
