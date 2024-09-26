@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_PREREQUISITOS 10
 #define MAX_DISCIPLINAS 50
