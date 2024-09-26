@@ -113,12 +113,14 @@ void print(const Disciplina *d);
     }
 }*/
 
+void regist();
+
 int main() {
     FILE *file;  
     char op = ' ';  
 
     //file = fopen("C:\\Users\\Aluno\\Documents\\ATP\\disciplinas.bin", "rb"); // Abrir arquivo no windows
-    file = fopen("home//adolfo//Documentos//codigos//disciplinas.txt","r"); //ABrir arquivo no linux
+    file = fopen("home//adolfo//Downloads//arqs_projeto_final//disciplinas.bin","rb"); //Abrir arquivo no linux
     if (file == NULL){
         return 0;
     }
@@ -138,10 +140,10 @@ int main() {
                     print(&disciplinas[i]);
                 }
                 break;
-            /*case '2';
+            case '2':
                 regist();
                 break;
-            case '3';
+            /*case '3';
                 record();
                 break;
             case '4';
@@ -219,4 +221,20 @@ void print(const Disciplina *d) {
 
     // Impressão do tipo da disciplina
     printf("|%-20s|\n", tipoD);
+}
+
+void regist(){
+    Disciplina cadastro; //variavel para guardar as materias que o aluno pretende cadastrar
+    int N;
+
+    printf("Quantas materias o aluno pretende cadastrar: ");
+    scanf("%d", &N);
+    getchar();  // Consome o caractere de nova linha (\n) deixado pelo scanf
+    printf("\n");
+
+    for(int i = 0; i < N; i++){
+        printf("Disciplina %d: ", i + 1);
+        fgets(cadastro.titulo, sizeof(cadastro.titulo), stdin);  // Lê a linha completa
+        printf("\n");
+    }
 }
