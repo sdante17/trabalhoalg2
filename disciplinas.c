@@ -1,27 +1,84 @@
 #include <stdio.h>
 #include <string.h>
-#include <locale.h>
 
 #define MAX_PREREQUISITOS 10
 #define MAX_DISCIPLINAS 50
 #define MAX_SEMESTRES 10
 
 void escreveTopo() {
-    printf("_______________________________________________________________________________________________________________________________\n");
-    printf("|                                                                                                                             |\n");
-    printf("|                                            Matriz Curricular Engenharia de Software                                         |\n");
-    printf("|_____________________________________________________________________________________________________________________________|\n");
+    printf("\u2554");  // ╔
+
+    for (int i = 0; i < 125; i++){
+        printf("\u2550");  // ═
+    }
+
+    printf("\u2557\n");  // ╗
+    
+    printf("\u2551");  // ║
+    printf("                                           Matriz Curricular Engenharia de Software                                          ");
+    printf("\u2551\n");  // ║
+    
+    printf("\u255A");  // ╚
+
+    for (int i = 0; i < 125; i++){
+        printf("\u2550");  // ═
+    }
+
+    printf("\u255D\n");  // ╝
 }
 
+
 void escreveCabecalho() {
-    setlocale(LC_ALL, "Portuguese");
-    printf("|                    |                    |                    |                    |                    |                    |\n");
-    printf("|      Codigo        |       Curso        |         CH         |      Semestre      |      Pre-Req       |    Tipo de Disc    |\n");
-    printf("|____________________|____________________|____________________|____________________|____________________|____________________|\n");
+
+    printf("\u2551      Codigo        \u2551      Curso         \u2551         CH         \u2551      Semestre      \u2551      Pre-Req       \u2551    Tipo de Disc    \u2551\n");
+    
+    printf("\u255F");  // ╟
+
+    for (int i = 0; i < 20; i++){
+        printf("\u2550");  // ═
+    }
+
+    printf("\u256B");  // ╫
+    for (int i = 0; i < 20; i++){
+        printf("\u2550");
+    }
+
+    printf("\u256B");
+
+    for (int i = 0; i < 20; i++){
+        printf("\u2550");
+    }
+
+    printf("\u256B");
+
+    for (int i = 0; i < 20; i++){
+        printf("\u2550");
+    }
+
+    printf("\u256B");
+
+    for (int i = 0; i < 20; i++){
+        printf("\u2550");
+    }
+
+    printf("\u256B");
+
+    for (int i = 0; i < 20; i++){
+        printf("\u2550");
+    }
+
+    printf("\u255F\n");  // ╟
 }
 
 void escreveFuncoes(){
-    printf("Digite 1 para listar matriz - 2 para ... - x para sair\n");
+    printf("Digite a opção desejada: ");
+    printf("1 - Listar matriz curricular\n");
+    printf("2 - Cadastrar disciplinas atuais\n");
+    printf("3 - Apresentar histórico escolar\n");
+    printf("4 - Gerenciar agenda (atividades e compromissos)\n");
+    printf("5 - Apresentar tarefas pendentes\n");
+    printf("x - Sair\n");
+
 }
 
 // Definição do enum para o tipo de disciplina
@@ -45,26 +102,29 @@ typedef struct {
 Disciplina disciplinas[MAX_DISCIPLINAS];
 int quantidadeRegistros;
 
-void lerMatriz(FILE *file, Disciplina *disciplinas, int *quantidade);
+void scan(FILE *file, Disciplina *disciplinas, int *quantidade);
 void print(const Disciplina *d);
 
-void listarMatriz(){
+/*void list(){
     escreveCabecalho();
     for(int i=0; i < quantidadeRegistros; i++){
         printf("Codigo: %s\n", disciplinas[i].codigo);
     }
-}
+}*/
 
 int main() {
-    //FILE *file;  
+    FILE *file;  
     char op = ' ';  
 
-    FILE *arq = fopen("C:/Users/Aluno/Documents/ATP/disciplinas.bin", "rb");
-    if (arq == NULL){
+    //file = fopen("C:\\Users\\Aluno\\Documents\\ATP\\disciplinas.bin", "rb"); // Abrir arquivo no windows
+    file = fopen("home//adolfo//Documentos//codigos//disciplinas.txt","r"); //ABrir arquivo no linux
+    if (file == NULL){
         return 0;
     }
-    fread(&quantidadeRegistros, sizeof(int), 1, arq);
-    fread(disciplinas, sizeof(Disciplina), quantidadeRegistros, arq);    
+    fread(&quantidadeRegistros, sizeof(int), 1, file);
+    fread(disciplinas, sizeof(Disciplina), quantidadeRegistros, file);
+    scan(file, disciplinas, &quantidadeRegistros);
+    fclose(file);
 
     do{
         system("cls");//limpar a tela
@@ -73,8 +133,22 @@ int main() {
         scanf("%c", &op);
         switch (op){
             case '1':
-                listarMatriz();
+                for (int i = 0; i < quantidadeRegistros; i++) {
+                    print(&disciplinas[i]);
+                }
                 break;
+            /*case '2';
+                regist();
+                break;
+            case '3';
+                record();
+                break;
+            case '4';
+                agenda();
+                break;
+            case '5';
+                pendAct();
+                break;*/
             case ' ':
                 break;
             default:
@@ -103,7 +177,7 @@ int main() {
     return 0;
 }
 
-void lerMatriz(FILE *file, Disciplina *disciplinas, int *quantidade) {
+void scan(FILE *file, Disciplina *disciplinas, int *quantidade) {
     int i = 0;
     while (fscanf(file, "%s %s %d %d %d", 
                   disciplinas[i].codigo, 
@@ -127,6 +201,7 @@ void lerMatriz(FILE *file, Disciplina *disciplinas, int *quantidade) {
 
 void print(const Disciplina *d) {
     const char *tipoD = (d->tipo == Obrigatoria) ? "Obrigatoria" : "Optativa";
+    escreveCabecalho();
 
     // Impressão dos dados da disciplina
     printf("|%-20s|%-20s|%-20d|%-20d|", d->codigo, d->titulo, d->cargaHoraria, d->semestre);
