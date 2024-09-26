@@ -6,7 +6,7 @@
 #define MAX_DISCIPLINAS 50
 #define MAX_SEMESTRES 10
 
-void escreveTopo() {
+void escreveTopo(){
     printf("\u2554");  // ╔
 
     for (int i = 0; i < 125; i++){
@@ -103,7 +103,7 @@ typedef struct {
 Disciplina disciplinas[MAX_DISCIPLINAS];
 int quantidadeRegistros;
 
-void scan(FILE *file, Disciplina *disciplinas, int *quantidade);
+void scan(FILE *file, Disciplina *disciplinas, int *quantidadeRegistros);
 void print(const Disciplina *d);
 
 /*void list(){
@@ -178,7 +178,7 @@ int main() {
     return 0;
 }
 
-void scan(FILE *file, Disciplina *disciplinas, int *quantidade) {
+void scan(FILE *file, Disciplina *disciplinas, int *quantidadeRegistros) {
     int i = 0;
     while (fscanf(file, "%s %s %d %d %d", 
                   disciplinas[i].codigo, 
@@ -197,7 +197,7 @@ void scan(FILE *file, Disciplina *disciplinas, int *quantidade) {
             break;
         }
     }
-    *quantidade = i;  // Total de disciplinas lidas
+    *quantidadeRegistros = i;  // Total de disciplinas lidas
 }
 
 void print(const Disciplina *d) {
