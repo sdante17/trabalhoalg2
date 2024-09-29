@@ -6,71 +6,75 @@
 #define MAX_DISCIPLINAS 50
 #define MAX_SEMESTRES 10
 
-void escreveTopo() {
+void escreveTopo(){
+    int total = 120;
+    // Título a ser centralizado
+    char titulo[] = "Matriz Curricular Engenharia de Software";
+
+    // Espaçamento antes e depois do título para centralizar
+    int before = (total - strlen(titulo)) / 2;
+    int after = total - strlen(titulo) - before;
+
+    // Linha superior
     printf("\u2554");  // ╔
-    
-    for (int i = 0; i < 185; i++) {
+    for(int i = 0; i < total; i++){
         printf("\u2550");  // ═
     }
-    
     printf("\u2557\n");  // ╗
 
-    printf("\u2551");  
-    printf("%-180s", "Matriz Curricular Engenharia de Software");
-    printf("\u2551\n");  // ║
+    // Linha em branco abaixo da borda superior
+    printf("\u2551%*s\u2551\n", total, "");
 
+    // Linha com o título centralizado
+    printf("\u2551%*s%s%*s\u2551\n", before, "", titulo, after, "");
+
+    // Linha em branco acima da borda inferior
+    printf("\u2551%*s\u2551\n", total, "");
+
+    // Linha inferior
     printf("\u255A");  // ╚
-
-    for (int i = 0; i < 185; i++) {
+    for(int i = 0; i < total; i++){
         printf("\u2550");  // ═
     }
-
     printf("\u255D\n");  // ╝
 }
 
-void escreveCabecalho() {
-    printf("\u2551 %-10s \u2551 %-30s \u2551 %-10s \u2551 %-10s \u2551 %-30s \u2551 %-15s \u2551\n", "Codigo", "Curso", "CH", "Semestre", "Pre-Req", "Tipo de Disciplina");
+void escreveCabecalho(){
+    printf("\u2551%-10s\u2551%-40s\u2551%-10s\u2551%-10s\u2551%-30s\u2551%-15s\u2551\n", "Codigo", "Curso", "CH", "Semestre", "Pre-Req", "Tipo");
     printf("\u255F");  // ╟
 
-    for (int i = 0; i < 10; i++) printf("\u2550");  // Código
+    for(int i = 0; i < 10; i++) printf("\u2550");  // Código
     printf("\u256B");  // ╫
 
-    for (int i = 0; i < 30; i++) printf("\u2550");  // Curso
+    for(int i = 0; i < 40; i++) printf("\u2550");  // Curso
     printf("\u256B");
 
-    for (int i = 0; i < 10; i++) printf("\u2550");  // Carga Horária
+    for(int i = 0; i < 10; i++) printf("\u2550");  // Carga Horária
     printf("\u256B");
 
-    for (int i = 0; i < 10; i++) printf("\u2550");  // Semestre
+    for(int i = 0; i < 10; i++) printf("\u2550");  // Semestre
     printf("\u256B");
 
-    for (int i = 0; i < 30; i++) printf("\u2550");  // Pré-requisitos
+    for(int i = 0; i < 30; i++) printf("\u2550");  // Pré-requisitos
     printf("\u256B");
 
-    for (int i = 0; i < 15; i++) printf("\u2550");  // Tipo de Disciplina
+    for(int i = 0; i < 15; i++) printf("\u2550");  // Tipo de Disciplina
     printf("\u255F\n");  // Finaliza a linha separadora
 }
 
-
 void escreveFuncoes(){
-    printf("Digite a opção desejada: ");
-    printf("1 - Listar matriz curricular\n");
-    printf("2 - Cadastrar disciplinas\n");
-    printf("3 - Apresentar histórico escolar\n");
-    printf("4 - Gerenciar agenda\n");
-    printf("5 - Apresentar tarefas pendentes\n");
-    printf("x - Sair\n");
-
+    printf("Digite a opção desejada: \n1 - Listar matriz curricular\n2 - Cadastrar disciplinas\n3 - Apresentar histórico escolar\n4 - Gerenciar agenda\n5 - Apresentar tarefas pendentes\nx - Sair\n");
+    //função de controle
 }
 
 // Definição do enum para o tipo de disciplina
-typedef enum {
+typedef enum{
     Obrigatoria,
     Optativa
 } TipoDisciplina;
 
 // Definição da struct para uma disciplina
-typedef struct {
+typedef struct{
     char codigo[10];                  // Código alfanumérico da disciplina
     char titulo[100];                  // Título da disciplina
     int cargaHoraria;                 // Carga horária da disciplina
@@ -84,17 +88,36 @@ typedef struct {
 Disciplina disciplinas[MAX_DISCIPLINAS];
 int quantidadeRegistros;
 
-void printPre(char prerequisitos[][10], int numPrerequisitos) {
+//função para relacionar o codigo da disciplina com seus titulos
+void frelate(char *codigo, char titulos[MAX_DISCIPLINAS][100], int *count){
+    int aux = 0;
+
+    for(int i = 0; i < quantidadeRegistros; i++){
+        if(strcmp(disciplinas[i].codigo, codigo) == 0){
+            strcpy(titulos[*count], disciplinas[i].titulo);
+            (*count)++;  // Incrementa o contador de títulos salvos
+            aux = 1;   // Marca que encontrou o código
+            break;
+        }
+    }
+
+    // Se o código não foi encontrado
+    if(!aux){
+        printf("Disciplina com o codigo %s nao encontrada.\n", codigo);
+    }
+}
+
+void printPre(char prerequisitos[][10], int numPrerequisitos){
     char str[31] = "";  // String final que conterá os códigos concatenados
     int slen = 0;
 
-    for(int i = 0; i < numPrerequisitos; i++) {
+    for(int i = 0; i < numPrerequisitos; i++){
         // Verifica se há espaço suficiente para o próximo pré-requisito
         int nlen = slen + strlen(prerequisitos[i]) + 1; // +1 para o espaço entre as strings
 
-        if(nlen <= 31) {
+        if(nlen <= 31){
             // Se não for o primeiro pré-requisito, adiciona um espaço
-            if (slen > 0) {
+            if(slen > 0){
                 strcat(str, " ");
                 slen++;
             }
@@ -111,15 +134,21 @@ void printPre(char prerequisitos[][10], int numPrerequisitos) {
     printf("%-30s\u2551 ", str);
 }
 
-/*void pause() {
+void pause(){
     printf("\nPressione Enter para continuar...");
     getchar(); // Captura qualquer tecla
     getchar(); // Para consumir o '\n' deixado pelo scanf
-}*/
+}
 
 void list();
 
 void regist();
+
+void record();
+
+void agenda();
+
+void actpend();
 
 int main() {
     FILE *file;  
@@ -127,15 +156,14 @@ int main() {
 
     //file = fopen("C:\\Users\\Aluno\\Documents\\ATP\\disciplinas.bin", "rb"); // Abrir arquivo no windows
     file = fopen("//home//adolfo//Downloads//arqs_projeto_final//disciplinas.bin","rb"); //Abrir arquivo no linux
-    if (file == NULL){
+    if(file == NULL){
         perror("Erro ao abrir o arquivo");
         return 0;
-    } else {
+    } else{
         printf("Arquivo aberto com sucesso!\n");
     }
 
     fread(&quantidadeRegistros, sizeof(int), 1, file);
-    printf("Quantidade de registros lidos: %d\n", quantidadeRegistros);
     fread(disciplinas, sizeof(Disciplina), quantidadeRegistros, file);
     fclose(file);
 
@@ -148,19 +176,23 @@ int main() {
         switch (op){
             case '1':
                 list();
-                //pause();
+                pause();
                 break;
             case '2':
                 regist();
+                pause();
                 break;
-            /*case '3';
+            case '3':
                 record();
+                pause();
                 break;
-            case '4';
+            /*case '4':
                 agenda();
+                pause();
                 break;
-            case '5';
-                pendAct();
+            case '5':
+                actpend();
+                pause();
                 break;*/
             case ' ':
                 break;
@@ -173,38 +205,83 @@ int main() {
     return 0;
 }
 
-void list() {
-    for (int i = 0; i < quantidadeRegistros; i++) {
+void list(){
+    escreveCabecalho();
+
+    for(int i = 0; i < quantidadeRegistros; i++){
         // Imprimir código, curso, CH, semestre
-        printf("\u2551 %-10s \u2551 %-30s \u2551 %-10d \u2551 %-10d \u2551 ", disciplinas[i].codigo, disciplinas[i].titulo, disciplinas[i].cargaHoraria, disciplinas[i].semestre);
+        printf("\u2551%-10s\u2551%-40s\u2551%-10d\u2551%-10d\u2551", disciplinas[i].codigo, disciplinas[i].titulo, disciplinas[i].cargaHoraria, disciplinas[i].semestre);
 
         // Imprimir pré-requisitos
-        if (disciplinas[i].numPrerequisitos > 0) {
-            for (int j = 0; j < disciplinas[i].numPrerequisitos; j++) {
+        if(disciplinas[i].numPrerequisitos > 0){
+            for(int j = 0; j < disciplinas[i].numPrerequisitos; j++){
                 printf("%s ", disciplinas[i].prerequisitos[j]);  // Exibir pré-requisitos
             }
-        } else {
-            printf("%-30s\u2551 ", "Nenhum");  // Caso não haja pré-requisitos
+        } else{
+            printf("%-30s\u2551", "Nenhum");  // Caso não haja pré-requisitos
         }
 
         // Imprimir tipo da disciplina
-        const char* tipo = (disciplinas[i].tipo == Obrigatoria) ? "Obrigatória" : "Optativa";
-        printf("%-15s \u2551\n", tipo);  // Finaliza a linha da disciplina
+        const char* tipo = (disciplinas[i].tipo == Obrigatoria) ? "Obrigatoria" : "Optativa";
+        printf("%-15s\u2551\n", tipo);  // Finaliza a linha da disciplina
     }
 }
 
 void regist(){
-    Disciplina cadastro; //variavel para guardar as materias que o aluno pretende cadastrar
-    int N;
-
-    printf("Quantas materias o aluno pretende cadastrar: ");
+    Disciplina cadastro[MAX_DISCIPLINAS];  // Array para guardar as disciplinas que o aluno pretende cadastrar
+    char titulos[MAX_DISCIPLINAS][100];  // Array para armazenar os títulos relacionados
+    int N, count = 0;  // Contador de materias e de títulos
+    
+    printf("Quantas materias o aluno pretende cadastrar? ");
     scanf("%d", &N);
-    getchar();  // Consome o caractere de nova linha (\n) deixado pelo scanf
     printf("\n");
 
+    // Loop para ler os códigos das disciplinas que o aluno deseja cadastrar
     for(int i = 0; i < N; i++){
-        printf("Disciplina %d: ", i + 1);
-        fgets(cadastro.titulo, sizeof(cadastro.titulo), stdin);  // Lê a linha completa
+        printf("Digite o codigo da %dª disciplina: ", i + 1);
+        scanf("%s", cadastro[i].codigo);  // Armazena o código no array de disciplinas
         printf("\n");
     }
+
+    // Loop para relacionar os códigos das disciplinas aos seus respectivos títulos
+    for(int i = 0; i < N; i++){
+        // Relaciona o código com o título e armazena no array titulos
+        frelate(cadastro[i].codigo, titulos, &count);
+        // Exibe o código e o título relacionados
+        printf("%s - %s\n", cadastro[i].codigo, titulos[count - 1]);
+    }
+
+    printf("Materias cadastradas com sucesso!\n");
+}
+
+void record(){
+    Disciplina concluidas[MAX_DISCIPLINAS];  // Array para guardar as disciplinas ja cursadas pelo usuario
+    char titulos[MAX_DISCIPLINAS][100];  // Array para armazenar os títulos relacionados
+    int N, count = 0;  // Contador de materias e de títulos
+
+    printf("Quantas materias o aluno cursou? ");
+    scanf("%d", &N);
+    printf("\n");
+
+    // Loop para ler os códigos das disciplinas que o aluno ja cursou
+    for (int i = 0; i < N; i++) {
+        printf("Digite o codigo da %dª disciplina: ", i + 1);
+        scanf("%s", concluidas[i].codigo);  // Armazena o código no array de disciplinas
+        printf("\n");
+    }
+
+    for(int i = 0; i < N; i++){
+        // Relaciona o código com o título e armazena no array titulos
+        frelate(concluidas[i].codigo, titulos, &count);
+        // Exibe o código e o título relacionados
+        printf("%s - %s\n", concluidas[i].codigo, titulos[count - 1]);
+    }
+}
+
+void agenda(){
+
+}
+
+void actpend(){
+
 }
