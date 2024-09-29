@@ -67,6 +67,34 @@ void escreveFuncoes(){
     //função de controle
 }
 
+void escreveFTopo(char titulo[100], int total){
+    if(titulo == NULL){
+        printf("Erro: Título inválido.\n");
+        return;
+    }
+
+    // Espaçamento antes e depois do título para centralizar
+    int before = (total - strlen(titulo)) / 2;
+    int after = total - strlen(titulo) - before;
+
+    // Linha superior
+    printf("\u2554");  // ╔
+    for(int i = 0; i < total; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u2557\n");  // ╗
+
+    // Linha com o título centralizado
+    printf("\u2551%*s%s%*s\u2551\n", before, "", titulo, after, "");
+
+    // Linha inferior
+    printf("\u255A");  // ╚
+    for(int i = 0; i < total; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
+}
+
 // Definição do enum para o tipo de disciplina
 typedef enum{
     Obrigatoria,
@@ -83,6 +111,12 @@ typedef struct{
     int numPrerequisitos;             // Quantidade de pré-requisitos
     TipoDisciplina tipo;              // Tipo da disciplina (Optativa ou Obrigatória)
 } Disciplina;
+
+//Definição da struct para a matriz curricular
+typedef struct{
+    Disciplina disciplinas[MAX_DISCIPLINAS];
+    int numSemestres;           //Número de semestres
+} MatrizCurricular;
 
 //variáveis globais
 Disciplina disciplinas[MAX_DISCIPLINAS];
@@ -243,15 +277,23 @@ void regist(){
         printf("\n");
     }
 
+    escreveFTopo("Disciplinas cadastradas", 50);
+
     // Loop para relacionar os códigos das disciplinas aos seus respectivos títulos
     for(int i = 0; i < N; i++){
         // Relaciona o código com o título e armazena no array titulos
         frelate(cadastro[i].codigo, titulos, &count);
         // Exibe o código e o título relacionados
-        printf("%s - %s\n", cadastro[i].codigo, titulos[count - 1]);
+        printf("\u2551%-10s\u2551%-40s\u2551\n", cadastro[i].codigo, titulos[count - 1]);
     }
 
-    printf("Materias cadastradas com sucesso!\n");
+    //formatação do final da tabela
+    printf("\u255A");  // ╚
+    for(int i = 0; i < total; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
+}
 }
 
 void record(){
@@ -270,12 +312,21 @@ void record(){
         printf("\n");
     }
 
+    escreveFTopo("Historico Escolar", 50);
+
     for(int i = 0; i < N; i++){
         // Relaciona o código com o título e armazena no array titulos
         frelate(concluidas[i].codigo, titulos, &count);
         // Exibe o código e o título relacionados
-        printf("%s - %s\n", concluidas[i].codigo, titulos[count - 1]);
+        printf("\u2551%-10s\u2551%-30s\u2551\n", concluidas[i].codigo, titulos[count - 1]);
     }
+
+    //formatação do final da tabela
+    printf("\u255A");  // ╚
+    for(int i = 0; i < total; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
 }
 
 void agenda(){
