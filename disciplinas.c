@@ -189,7 +189,9 @@ void actpend();
 
 int main() {
     FILE *file;  
-    char op = ' ';  
+    char op = ' ';
+    int A = 0;
+    Atividade atividade[MAX_ATIVIDADES];
 
     //file = fopen("C:\\Users\\Aluno\\Documents\\ATP\\disciplinas.bin", "rb"); // Abrir arquivo no windows
     file = fopen("//home//adolfo//Downloads//arqs_projeto_final//disciplinas.bin","rb"); //Abrir arquivo no linux
@@ -209,7 +211,7 @@ int main() {
         system("clear"); //limpar a tela Linux
         escreveTopo();        
         escreveFuncoes();
-        scanf("%c", &op);
+        scanf(" %c", &op);
         switch (op){
             case '1':
                 list();
@@ -224,14 +226,11 @@ int main() {
                 pause();
                 break;
             case '4':
-                Atividade atividade[MAX_ATIVIDADES];
-                agenda(Atividade atividade[]);
+                agenda(atividade, &A);
                 pause();
                 break;
             case '5':
-                Atividade atividade[MAX_ATIVIDADES];
-                agenda(Atividade atividade[]);
-                actpend(Atividade atividade[]);
+                actpend(atividade, &A);
                 pause();
                 break;
             case ' ':
@@ -275,6 +274,11 @@ void regist(){
     scanf("%d", &N);
     printf("\n");
 
+    if (N > MAX_DISCIPLINAS) {
+        printf("Limite de disciplinas excedido.\n");
+        return;
+    }
+
     // Loop para ler os códigos das disciplinas que o aluno deseja cadastrar
     for(int i = 0; i < N; i++){
         printf("Digite o codigo da %dª disciplina: ", i + 1);
@@ -294,11 +298,11 @@ void regist(){
 
     //formatação do final da tabela
     printf("\u255A");  // ╚
-    for(int i = 0; i < total; i++){
+    for(int i = 0; i < 50; i++){
         printf("\u2550");  // ═
     }
     printf("\u255D\n");  // ╝
-}
+
 }
 
 void record(){
@@ -309,6 +313,11 @@ void record(){
     printf("Quantas materias o aluno cursou? ");
     scanf("%d", &N);
     printf("\n");
+
+    if (N > MAX_DISCIPLINAS) {
+        printf("Limite de disciplinas excedido.\n");
+        return;
+    }
 
     // Loop para ler os códigos das disciplinas que o aluno ja cursou
     for (int i = 0; i < N; i++) {
@@ -328,68 +337,98 @@ void record(){
 
     //formatação do final da tabela
     printf("\u255A");  // ╚
-    for(int i = 0; i < total; i++){
+    for(int i = 0; i < 50; i++){
         printf("\u2550");  // ═
     }
     printf("\u255D\n");  // ╝
 }
 
-void agenda(Atividade atividade[]){
+void agenda(Atividade atividade[], int *A){
     int N;
 
-    printf("Quantas atividades serao adicionadas a agenda?");
+    printf("Quantas atividades serao adicionadas a agenda? ");
     scanf("%d", &N);
-    printf("\n");
+    getchar();
 
-    if (N >= MAX_ATIVIDADES) {
-        printf("Limite de atividades atingido.\n");
+    if (N > MAX_ATIVIDADES) {
+        printf("Limite de atividades excedido.\n");
         return;
     }
 
+    *A = N; //Variavel que vai servir de ponteiro para quantidade de atividades lidas
     for(int i = 0; i < N; i++){
-        char aux[1];
+        char aux;
         
-        printf("Digite o título da atividade: ");
-        fgets(atividade.titulo, 100, stdin);
-        atividade.titulo[strcspn(novo.titulo, "\n")] = 0; // Remover \n no final
+        printf("Digite o titulo da atividade: ");
+        fgets(atividade[i].titulo, 100, stdin);
+        atividade[i].titulo[strcspn(atividade[i].titulo, "\n")] = 0;  // Remover \n no final
 
         printf("Digite a data (DD/MM/AAAA): ");
-        fgets(atividade.data, 11, stdin);
-        atividade.data[strcspn(atividade.data, "\n")] = 0; // Remover \n no final
+        fgets(atividade[i].data, 11, stdin);
+        atividade[i].data[strcspn(atividade[i].data, "\n")] = 0;  // Remover \n no final
 
-        printf("Sua atividade ja foi concluida? (S ou N)");
-        scanf("%s", aux);
-        if(aux = 'N'){
-            atividade.status = 0;
-        } 
-        if(aux = 'S'){
-            atividade.status = 1;
+        printf("Sua atividade ja foi concluida? (S ou N) ");
+        scanf(" %c", &aux);  // Espaço para ignorar espaços em branco
+        getchar();
+
+
+        if(aux == 'N'){
+            atividade[i].status = 0;
+        } else if(aux == 'S'){
+            atividade[i].status = 1;
         } else{
             printf("\nEscolha invalida!\n");
             return;
         }
+        printf("\n");
 
         printf("Atividade adicionada com sucesso!\n");
     }
 
     escreveFTopo("Agenda academica", 60);
-    printf("\u2551%-30s\u2551%-15s\u2551%-11s\u2551\n", "Titulo", "Data", "Status");
+    printf("\u2551%-30s\u2551%-15s\u2551%-13s\u2551\n", "Titulo", "Data", "Status");
+    // Linha inferior das colunas
+    printf("\u255A");  // ╚
+    for(int i = 0; i < 60; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
 
     for(int i = 0; i < N; i++){
         printf("\u2551%-30s\u2551%-15s\u2551", atividade[i].titulo, atividade[i].data);
-        printf("%-11s\u2551\n", (atividade[i].status == 0) ? "Pendente" : "Concluida");
+        printf("%-13s\u2551\n", (atividade[i].status == 0) ? "Pendente" : "Concluida");
 
     }
+
+    //formatação do final da tabela
+    printf("\u255A");  // ╚
+    for(int i = 0; i < 60; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
 }
 
-void actpend(Atividade atividade[]){
-    escreveFTopo("Atividades Pendentes", 48);
-    printf("\u2551%-30s\u2551%-15s\u2551\n", "Titulo", "Data");
+void actpend(Atividade atividade[], int *A){
+    escreveFTopo("Atividades Pendentes", 46);
+    printf("\u2551%-31s\u2551%-14s\u2551\n", "Titulo", "Data");
 
-    if(atividade.status == 0){
-        for(int i = 0; i < MAX_ATIVIDADES; i++){
-            printf("\u2551%-30s\u2551%-15s\u2551\n", atividade[i].titulo, atividade[i].data);
+    // Linha inferior das colunas
+    printf("\u255A");  // ╚
+    for(int i = 0; i < 46; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
+
+    for(int i = 0; i < *A; i++){
+        if (atividade[i].status == 0){  // Somente atividades pendentes
+            printf("\u2551%-31s\u2551%-14s\u2551\n", atividade[i].titulo, atividade[i].data);
         }
     }
-    
+
+    //formatação do final da tabela
+    printf("\u255A");  // ╚
+    for(int i = 0; i < 46; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
 }
