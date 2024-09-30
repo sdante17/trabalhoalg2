@@ -5,6 +5,7 @@
 #define MAX_PREREQUISITOS 10
 #define MAX_DISCIPLINAS 50
 #define MAX_SEMESTRES 10
+#define MAX_ATIVIDADES 100
 
 void escreveTopo(){
     int total = 120;
@@ -63,16 +64,11 @@ void escreveCabecalho(){
 }
 
 void escreveFuncoes(){
-    printf("Digite a opção desejada: \n1 - Listar matriz curricular\n2 - Cadastrar disciplinas\n3 - Apresentar histórico escolar\n4 - Gerenciar agenda\n5 - Apresentar tarefas pendentes\nx - Sair\n");
+    printf("Digite a opcao desejada: \n1 - Listar matriz curricular\n2 - Cadastrar disciplinas\n3 - Apresentar historico escolar\n4 - Gerenciar agenda\n5 - Apresentar tarefas pendentes\nx - Sair\n");
     //função de controle
 }
 
 void escreveFTopo(char titulo[100], int total){
-    if(titulo == NULL){
-        printf("Erro: Título inválido.\n");
-        return;
-    }
-
     // Espaçamento antes e depois do título para centralizar
     int before = (total - strlen(titulo)) / 2;
     int after = total - strlen(titulo) - before;
@@ -117,6 +113,13 @@ typedef struct{
     Disciplina disciplinas[MAX_DISCIPLINAS];
     int numSemestres;           //Número de semestres
 } MatrizCurricular;
+
+//Definição da struct para uma atividade
+typedef struct {
+    char titulo[100];      // Título da atividade
+    char data[11];         // Data da atividade (DD/MM/AAAA)
+    int status;            // Status da atividade (Pendente ou Concluída)
+} Atividade;
 
 //variáveis globais
 Disciplina disciplinas[MAX_DISCIPLINAS];
@@ -220,14 +223,17 @@ int main() {
                 record();
                 pause();
                 break;
-            /*case '4':
-                agenda();
+            case '4':
+                Atividade atividade[MAX_ATIVIDADES];
+                agenda(Atividade atividade[]);
                 pause();
                 break;
             case '5':
-                actpend();
+                Atividade atividade[MAX_ATIVIDADES];
+                agenda(Atividade atividade[]);
+                actpend(Atividade atividade[]);
                 pause();
-                break;*/
+                break;
             case ' ':
                 break;
             default:
@@ -256,8 +262,7 @@ void list(){
         }
 
         // Imprimir tipo da disciplina
-        const char* tipo = (disciplinas[i].tipo == Obrigatoria) ? "Obrigatoria" : "Optativa";
-        printf("%-15s\u2551\n", tipo);  // Finaliza a linha da disciplina
+        printf("%-15s\u2551\n", (disciplinas[i].tipo == Obrigatoria) ? "Obrigatoria" : "Optativa");  // Finaliza a linha da disciplina
     }
 }
 
@@ -329,10 +334,62 @@ void record(){
     printf("\u255D\n");  // ╝
 }
 
-void agenda(){
+void agenda(Atividade atividade[]){
+    int N;
 
+    printf("Quantas atividades serao adicionadas a agenda?");
+    scanf("%d", &N);
+    printf("\n");
+
+    if (N >= MAX_ATIVIDADES) {
+        printf("Limite de atividades atingido.\n");
+        return;
+    }
+
+    for(int i = 0; i < N; i++){
+        char aux[1];
+        
+        printf("Digite o título da atividade: ");
+        fgets(atividade.titulo, 100, stdin);
+        atividade.titulo[strcspn(novo.titulo, "\n")] = 0; // Remover \n no final
+
+        printf("Digite a data (DD/MM/AAAA): ");
+        fgets(atividade.data, 11, stdin);
+        atividade.data[strcspn(atividade.data, "\n")] = 0; // Remover \n no final
+
+        printf("Sua atividade ja foi concluida? (S ou N)");
+        scanf("%s", aux);
+        if(aux = 'N'){
+            atividade.status = 0;
+        } 
+        if(aux = 'S'){
+            atividade.status = 1;
+        } else{
+            printf("\nEscolha invalida!\n");
+            return;
+        }
+
+        printf("Atividade adicionada com sucesso!\n");
+    }
+
+    escreveFTopo("Agenda academica", 60);
+    printf("\u2551%-30s\u2551%-15s\u2551%-11s\u2551\n", "Titulo", "Data", "Status");
+
+    for(int i = 0; i < N; i++){
+        printf("\u2551%-30s\u2551%-15s\u2551", atividade[i].titulo, atividade[i].data);
+        printf("%-11s\u2551\n", (atividade[i].status == 0) ? "Pendente" : "Concluida");
+
+    }
 }
 
-void actpend(){
+void actpend(Atividade atividade[]){
+    escreveFTopo("Atividades Pendentes", 48);
+    printf("\u2551%-30s\u2551%-15s\u2551\n", "Titulo", "Data");
 
+    if(atividade.status == 0){
+        for(int i = 0; i < MAX_ATIVIDADES; i++){
+            printf("\u2551%-30s\u2551%-15s\u2551\n", atividade[i].titulo, atividade[i].data);
+        }
+    }
+    
 }
