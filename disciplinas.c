@@ -41,6 +41,13 @@ void escreveTopo(){
 }
 
 void escreveCabecalho(){
+    // Linha superior do cabeçalho
+    printf("\u2554");  // ╔
+    for(int i = 0; i < 120; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u2557\n");  // ╗
+
     printf("\u2551%-10s\u2551%-40s\u2551%-10s\u2551%-10s\u2551%-30s\u2551%-15s\u2551\n", "Codigo", "Curso", "CH", "Semestre", "Pre-Req", "Tipo");
     printf("\u255F");  // ╟
 
@@ -64,8 +71,22 @@ void escreveCabecalho(){
 }
 
 void escreveFuncoes(){
-    printf("Digite a opcao desejada: \n1 - Listar matriz curricular\n2 - Cadastrar disciplinas\n3 - Apresentar historico escolar\n4 - Gerenciar agenda\n5 - Apresentar tarefas pendentes\nx - Sair\n");
+    // Linha superior
+    /*printf("\u2554");  // ╔
+    for(int i = 0; i < 120; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u2557\n");  // ╗*/
+
+    printf("\u2551%-40s%-40s%-40s\u2551\n\u2551%-40s%-40s%-40s\u2551\n", "1 - Listar matriz curricular", "3 - Apresentar historico escolar", "5 - Apresentar tarefas pendentes", "2 - Cadastrar disciplinas", "4 - Gerenciar agenda" , "x - Sair");
     //função de controle
+
+    // Linha inferior
+    printf("\u255A");  // ╚
+    for(int i = 0; i < 120; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
 }
 
 void escreveFTopo(char titulo[100], int total){
@@ -211,6 +232,7 @@ int main() {
         system("clear"); //limpar a tela Linux
         escreveTopo();        
         escreveFuncoes();
+        printf("Digite a opcao desejada: ");
         scanf(" %c", &op);
         switch (op){
             case '1':
@@ -263,6 +285,13 @@ void list(){
         // Imprimir tipo da disciplina
         printf("%-15s\u2551\n", (disciplinas[i].tipo == Obrigatoria) ? "Obrigatoria" : "Optativa");  // Finaliza a linha da disciplina
     }
+
+    //formatação do final da tabela
+    printf("\u255A");  // ╚
+    for(int i = 0; i < 120; i++){
+        printf("\u2550");  // ═
+    }
+    printf("\u255D\n");  // ╝
 }
 
 void regist(){
@@ -293,7 +322,8 @@ void regist(){
         // Relaciona o código com o título e armazena no array titulos
         frelate(cadastro[i].codigo, titulos, &count);
         // Exibe o código e o título relacionados
-        printf("\u2551%-10s\u2551%-40s\u2551\n", cadastro[i].codigo, titulos[count - 1]);
+        printf("\u2551%-10s\u2551%-39s\u2551\n", cadastro[i].codigo, titulos[count - 1]);
+
     }
 
     //formatação do final da tabela
@@ -332,7 +362,7 @@ void record(){
         // Relaciona o código com o título e armazena no array titulos
         frelate(concluidas[i].codigo, titulos, &count);
         // Exibe o código e o título relacionados
-        printf("\u2551%-10s\u2551%-30s\u2551\n", concluidas[i].codigo, titulos[count - 1]);
+        printf("\u2551%-10s\u2551%-39s\u2551\n", concluidas[i].codigo, titulos[count - 1]);
     }
 
     //formatação do final da tabela
