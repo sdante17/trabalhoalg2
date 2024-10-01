@@ -129,12 +129,6 @@ typedef struct{
     TipoDisciplina tipo;              // Tipo da disciplina (Optativa ou Obrigatória)
 } Disciplina;
 
-//Definição da struct para a matriz curricular
-typedef struct{
-    Disciplina disciplinas[MAX_DISCIPLINAS];
-    int numSemestres;           //Número de semestres
-} MatrizCurricular;
-
 //Definição da struct para uma atividade
 typedef struct {
     char titulo[100];      // Título da atividade
