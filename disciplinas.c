@@ -213,11 +213,6 @@ void frelate(int *codigo, char titulos[MAX_DISCIPLINAS][51], int *count){
     }
 }
 
-void pause() {
-    printf("\nPressione Enter para continuar...");
-    while (getchar() != '\n'); // Limpa o buffer até encontrar um \n
-}
-
 void list();
 
 void regist();
@@ -229,8 +224,8 @@ void agenda();
 void actpend();
 
 void savefile(Disciplina *disciplinas, int total) {
-    //file = fopen("C:\\Users\\Aluno\\Documents\\ATP\\disciplinas.txt", "w"); // Abrir e escrever arquivo no Windows
-    FILE *file = fopen("//home//adolfo//Downloads//arqs_projeto_final//disciplinas.txt", "w"); // Abrir e escrever arquivo no Linux
+    //file = fopen("\\disciplinas.txt", "w"); // Abrir e escrever arquivo no Windows
+    FILE *file = fopen("//disciplinas.txt", "w"); // Abrir e escrever arquivo no Linux
 
     if (file == NULL) {
         printf("Erro ao abrir o arquivo para gravação.\n");
@@ -251,8 +246,8 @@ void savefile(Disciplina *disciplinas, int total) {
 }
 
 void scanfile(Disciplina *disciplinas) {
-    //FILE *file = fopen("C:\\Users\\Aluno\\Documents\\ATP\\disciplinas.txt", "r"); // Abrir e ler arquivo no windows
-    FILE *file = fopen("//home//adolfo//Downloads//arqs_projeto_final//disciplinas.txt", "r"); // Abrir e ler arquivo no Linux
+    //FILE *file = fopen("\\disciplinas.txt", "r"); // Abrir e ler arquivo no windows
+    FILE *file = fopen("//disciplinas.txt", "r"); // Abrir e ler arquivo no Linux
     if (file == NULL) {
         printf("Erro ao abrir o arquivo para leitura.\n");
         return;
@@ -282,8 +277,6 @@ int main() {
     // Chama a função para gravar o arquivo binário
     savefile(disciplinas, quantidadeRegistros);
     
-    printf("Arquivo disciplinas.txt criado com sucesso!\n");
-
     // Chama a função para ler o arquivo binário
     scanfile(disciplinas);
 
@@ -297,23 +290,18 @@ int main() {
         switch (op){
             case '1':
                 list();
-                pause();
                 break;
             case '2':
                 regist();
-                pause();
                 break;
             case '3':
                 record();
-                pause();
                 break;
             case '4':
                 agenda(atividade, &A);
-                pause();
                 break;
             case '5':
                 actpend(atividade, &A);
-                pause();
                 break;
             case ' ':
                 break;
@@ -323,6 +311,12 @@ int main() {
             default:
                 printf("Opcao invalida!\n");
                 break;
+        }
+
+        if (op != 'x') {
+            printf("Pressione qualquer tecla para continuar...\n");
+            getchar(); // Espera o usuário pressionar uma tecla para continuar
+            getchar(); // Captura o Enter
         }
     }while(op != 'x');
     
